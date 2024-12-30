@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_smorest import Api
 from db import db
+from flask_cors import CORS
 
 from resources.movies import blpM
 from resources.programs import blpProg
@@ -12,6 +13,7 @@ from resources.authentication import blpAuth
 
 def create_app(db_url=None):
     app = Flask(__name__)
+    CORS(app) 
     app.config["API_TITLE"] = "TBS REST API"
     app.config["API_VERSION"] = "v1"
     app.config["OPENAPI_VERSION"] = "3.0.3"

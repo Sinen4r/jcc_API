@@ -1,0 +1,229 @@
+#map {
+  height: 400px;
+  width: 800px;
+  margin: 0 auto;
+  margin-top: -80px;
+  margin-bottom: 100px;
+}
+/* General Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: black;
+  }
+  
+  /* Navbar */
+  .navbar {
+    color: white;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 30px;
+    background: rgba(0, 0, 0, 0.7); /* Transparent effect */
+    z-index: 1000;
+  }
+  
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+    font-weight: bold;
+  }
+  .jccolgo{
+    margin: 10px;
+    height: 20%;
+  
+  }
+  .signup-button {
+    background-color: #3D9DF6;
+    color: white;
+    border: none;
+    font-weight:600;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 50px;
+  }
+  
+  .signup-button:hover {
+    background-color: #1A73E8;
+  }
+  
+  /* Hero Section */
+  .hero {
+    color: white;
+
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  .background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+  hr{
+    color: black;
+  }
+  .userInput{
+    margin: 0 auto;
+
+  }
+  .hero-content h1 {
+    font-size: 4rem;
+    margin: 0;
+  }
+  
+  .subtitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .description {
+    margin-top: 10px;
+    font-size: 1rem;
+    margin-bottom: 35px;
+    max-width: 600px;
+  }
+  
+  .btn {
+    margin-top: 20px;
+    padding: 15px 30px;
+    background-color: #3D9DF6;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  
+  .btn:hover {
+    background-color: #1A73E8;
+  }
+  
+  .vertical-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Optional: adds space between elements */
+    align-items:center;
+  }
+
+
+
+
+
+
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  body{
+    line-height: 1.5;
+    font-family: 'Poppins', sans-serif;
+  }
+  *{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+  }
+  .container{
+    max-width: 1170px;
+    margin:auto;
+  }
+  .row{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  ul{
+    list-style: none;
+  }
+  .footer{
+    background-color: #24262b;
+      padding: 70px 0;
+  }
+  .footer-col{
+     width: 25%;
+     padding: 0 15px;
+  }
+  .footer-col h4{
+    font-size: 18px;
+    color: #ffffff;
+    text-transform: capitalize;
+    margin-bottom: 35px;
+    font-weight: 500;
+    position: relative;
+  }
+  .footer-col h4::before{
+    content: '';
+    position: absolute;
+    left:0;
+    bottom: -10px;
+    background-color: #1A73E8;
+    height: 2px;
+    box-sizing: border-box;
+    width: 50px;
+  }
+  .footer-col ul li:not(:last-child){
+    margin-bottom: 10px;
+  }
+  .footer-col ul li a{
+    font-size: 16px;
+    text-transform: capitalize;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 300;
+    color: #bbbbbb;
+    display: block;
+    transition: all 0.3s ease;
+  }
+  .footer-col ul li a:hover{
+    color: #ffffff;
+    padding-left: 8px;
+  }
+  .footer-col .social-links a{
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    background-color: rgba(255,255,255,0.2);
+    margin:0 10px 10px 0;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    color: #ffffff;
+    transition: all 0.5s ease;
+  }
+  .footer-col .social-links a:hover{
+    color: #24262b;
+    background-color: #ffffff;
+  }
+  
+  /*responsive*/
+  @media(max-width: 767px){
+    .footer-col{
+      width: 50%;
+      margin-bottom: 30px;
+  }
+  }
+  @media(max-width: 574px){
+    .footer-col{
+      width: 100%;
+  }
+  }
+  #icon{
+    height: 1%;
+    width: 40px;
+  }

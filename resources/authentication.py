@@ -30,6 +30,7 @@ class authentication(MethodView):
         return {"message": "Login successful"}
 @blpAuth.route("/createUser")
 class create(MethodView):
+    @blpAuth.response(200,LoginResponseSchema)
     @blpAuth.arguments(UserSchema)  # This will validate and deserialize the incoming JSON data    
     def post(self,loginData):
         """create a user """
@@ -41,7 +42,7 @@ class create(MethodView):
         # Add the new user to the session and commit to the database
         db.session.add(newUser)
         db.session.commit()
-
+        return {"message": "sign up successful"}
 @blpAuth.route("/info/<username>")
 class create(MethodView):
     @blpAuth.response(200,infoUserSchema)

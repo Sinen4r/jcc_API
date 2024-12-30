@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agenda Location</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDF3PyWSf5imANfClhmeP2BjdI7uLIZBt&callback=initMap&libraries=geometry,places&v=weekly"
+      async
+    ></script>
+
+  </head>
+  <body>
+    <div>
+      <label for="agendaIdInput">Enter Agenda ID: </label>
+      <input type="text" id="agendaIdInput" />
+      <button onclick="fetchAgendaData()">Show Agenda Location</button>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+      let map;
+      let infoWindow;
+
+      // Initialize the map
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 35.68814709583306, lng: 10.842432674245234 }, // Default location
+          zoom: 12,
+        });
+
+        infoWindow = new google.maps.InfoWindow();
+      }
+
+      // Fetch agenda data from the API
+      async function fetchAgendaData() {
+        const agendaId = document.getElementById("agendaIdInput").value;
+        if (!agendaId) {
+          alert("Please enter an Agenda ID.");
+          return;
+        }
+
+        try {
+          const response = await fetch(`http://127.0.0.1:5000/Venue`);
+          if (!response.ok) {
+            throw new Error(`Agenda with ID \${agendaId} not found.`);
+          }
+
+          const agendaData = await response.json();
+          const agendas = agendaData.Venues || [];
+
+          displayAgendasOnMap(agendas);
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      // Display the agenda location on the map
+  function displayAgendasOnMap(agendas) {
+  agendas.forEach(agenda => {
+    const { name, address, latitude, longitude } = agenda;
+    
+    // Check if location is available
+    if (!latitude || !longitude) {
+      alert("Location not available for one of the agendas.");
+      return;
+    }
+
+    const location = { lat: latitude, lng: longitude };
+
+    // Create a marker for the agenda on the map
+    const marker = new google.maps.Marker({
+      position: location,
+      map: map,
+      title: name,
+    });
+
+    const content = `
+      <div style="padding: 8px">
+        <h2 style="margin-top: 0">${name}</h2>
+        <p>${address}</p>
+      </div>
+    `;
+
+    // Add an info window that appears when the marker is clicked
+    marker.addListener('click', () => {
+      infoWindow.setContent(content);
+      infoWindow.open(map, marker);
+    });
+
+    // Optionally, adjust map center and zoom level based on the last agenda
+    map.setCenter(location);
+    map.setZoom(8);
+  });
+}
+
+    </script>
+  </body>
+</html>
