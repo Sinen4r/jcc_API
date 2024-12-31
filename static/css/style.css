@@ -1,8 +1,15 @@
-#map {
+#map ,#map2{
   height: 400px;
   width: 800px;
   margin: 0 auto;
   margin-top: -80px;
+  margin-bottom: 100px;
+}
+#map2{
+  height: 400px;
+  width: 800px;
+  margin: 0 auto;
+  margin-top: 75;
   margin-bottom: 100px;
 }
 /* General Styles */
@@ -227,3 +234,44 @@ body, html {
     height: 1%;
     width: 40px;
   }
+
+
+
+/* form */
+.form-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px; /* Adds spacing between form fields */
+  width: 300px; /* Optional: Set form width */
+  margin: 20px auto; /* Center the form horizontally */
+  margin-bottom: 70px;
+}
+
+.form-container label {
+  font-weight: bold;
+}
+
+.form-container input, .form-container button {
+  padding: 8px;
+  font-size: 14px;
+}
+
+.form-container button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  
+}
+
+.form-container button:hover {
+  background-color: #0056b3;
+}
+
+#movies{
+  color: white;
+  margin: 0 auto;
+  margin-left: 400px;
+  margin-bottom: 50px;
+}

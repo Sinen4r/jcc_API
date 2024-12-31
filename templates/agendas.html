@@ -8,6 +8,7 @@
   <script
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDF3PyWSf5imANfClhmeP2BjdI7uLIZBtI&callback=initMap&libraries=geometry,places&v=weekly"
   async
+  defer
 ></script>
 </head>
 <body>
@@ -28,22 +29,58 @@
 
   <!-- Hero Section -->
   <header class="hero">
-    <img src="blue-wavy-light-streak-background.jpg" alt="Background" class="background-image">
     <img src="../static/images/jcc.png" class="jccolgo">
     <div class="hero-content" >
       <h1>JCC AGENDA</h1>
       <p class="subtitle">JOURNÉES CINÉMATOGRAPHIQUES DE CARTHAGE</p>
       <p class="description">An annual event that takes place in and was founded in 1966</p>
       <div class="vertical-layout">
-        <button href="#venues" class="btn" onclick="fetchAgendaData()">Check Our Venues</button>
-        <label for="agendaIdInput">Enter Agenda ID: </label>
-        <input type="text" id="agendaIdInput" />
+        <button href="#venues" class="btn" onclick="fetchVenueData()">Check Our Venues</button>
       </div>
     </div>
   </header>
   <div  id="map"></div> 
+  <p class="subtitle" id="movies">What's Playing Today? Discover our Movies Near You!</p>
+  <form class="form-container" >
+    <label for="dateInput">Date:</label>
+    <input   min="2024-12-14" max="2024-12-21"   type="date" id="dateInput" name="date" required />
 
-  
+    <label for="venueInput">Venue:</label>
+    <select id="venueInput" name="venue_id" >
+      <option value="" disabled selected>Select a venue</option>
+      <option value="L'OPERA">L'OPERA</option>
+      <option value="THEATRE DES REGIONS">THEATRE DES REGIONS</option>
+      <option value="LE 4EME ART">LE 4EME ART</option>
+      <option value="ABC">ABC</option>
+      <option value="LE RIO">LE RIO</option>
+      <option value="OMAR KHELIFI">OMAR KHELIFI</option>
+      <option value="THAER CHERIAA">THAER CHERIAA</option>
+      <option value="AFRICA">AFRICA</option>
+      <option value="LE COLISIEE">LE COLISIEE</option>
+      <option value="IBN RACHIQ">IBN RACHIQ</option>
+      <option value="LE PALACE">LE PALACE</option>
+      <option value="LE MONDIAL">LE MONDIAL</option>
+      <option value="PARNASSE">PARNASSE</option>
+      <option value="CINE AVENUE">CINE AVENUE</option>
+      <option value="ELHAMBRA ZEPHYR">ELHAMBRA ZEPHYR</option>
+      <option value="MAD'ART">MAD'ART</option>
+      <option value="AGORA">AGORA</option>
+      <option value="CINEVOG">CINEVOG</option>
+      <option value="AMILCAR">AMILCAR</option>
+      <option value="DAR MASRAHI">DAR MASRAHI</option>
+      <option value="pathé ksibet">pathé ksibet</option>
+    </select>
+    
+    <label for="hourInput">Hour:</label>
+    <input type="time" id="hourInput" name="hour" required />
+
+    <label for="movieNameInput">Movie Name:</label>
+    <input type="text" id="movieNameInput" name="movie_or_programme_name" placeholder="Enter movie name"  />
+
+    <button type="button" onclick="fetchAgendaData()">Submit</button>
+  </form>
+  <div  id="map2"></div> 
+
   <footer class="footer">
     <div class="container">
       <div class="row">
@@ -94,7 +131,11 @@
   
   <script>
     let map;
+
     let infoWindow;
+    let map2;
+
+    let infoWindow2;
     const style={
       default: [],
       retro: [
@@ -217,21 +258,29 @@
         center: { lat: 35.68814709583306, lng: 10.842432674245234 }, // Default location
         zoom: 12,
       });
-      map.controls[google.maps.ControlPosition.TOP_LEFT].push("retro");
 
       map.setOptions({ styles: style["retro"] });
 
       infoWindow = new google.maps.InfoWindow();
+   
+      map2 = new google.maps.Map(document.getElementById("map2"), {
+        center: { lat: 35.68814709583306, lng: 10.842432674245234 }, // Default location
+        zoom: 12,
+      });
+
+      map2.setOptions({ styles: style["retro"] });
+
+      infoWindow2 = new google.maps.InfoWindow();
     }
 
     // Fetch agenda data from the API
-    async function fetchAgendaData() {
-      const agendaId = document.getElementById("agendaIdInput").value;
-      if (!agendaId) {
-        alert("Please enter an Agenda ID.");
-        return;
-      }
-
+    async function fetchVenueData() {
+      // const agendaId = document.getElementById("agendaIdInput").value;
+      // if (!agendaId) {
+      //   alert("Please enter an Agenda ID.");
+      //   return;
+      // }
+      event.preventDefault();
       try {
         const response = await fetch(`http://127.0.0.1:5000/Venue`);
         if (!response.ok) {
@@ -241,14 +290,14 @@
         const agendaData = await response.json();
         const agendas = agendaData.Venues || [];
 
-        displayAgendasOnMap(agendas);
+        displayVenueOnMap(agendas);
       } catch (error) {
         alert(error.message);
       }
     }
 
     // Display the agenda location on the map
-function displayAgendasOnMap(agendas) {
+    function displayVenueOnMap(agendas) {
 agendas.forEach(agenda => {
   const { name, address, latitude, longitude } = agenda;
   
@@ -285,6 +334,84 @@ agendas.forEach(agenda => {
   map.setZoom(8);
 });
 }
+
+
+    async function fetchAgendaData() {
+      event.preventDefault();
+    const date = document.getElementById("dateInput").value;
+    const venue_id = document.getElementById("venueInput").value;
+    const hour = document.getElementById("hourInput").value;
+    const movie_or_programme_name = document.getElementById("movieNameInput").value;
+    const requestBody = {
+                            date,
+                            hour,
+                            };
+
+  if (venue_id) {
+    requestBody.venue_id = venue_id; // Add venue_id only if it's not empty
+  }
+
+  if (movie_or_programme_name) {
+    requestBody.movie_or_programme_name = movie_or_programme_name; // Add movie_or_programme_name only if it's not empty
+    }
+        console.log(date,hour);
+    const response = await fetch(`http://127.0.0.1:5000/agenda/date`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },                
+                body: JSON.stringify(requestBody),
+                });
+                console.log("fetched")
+  if (!response.ok) {
+          throw new Error(`no available movies/programs`);
+        }
+      const agendaData = await response.json();
+      const agendas = agendaData.agendas || [];
+      console.log(agendas)
+      displayMoviesOnMap(agendas);
+
+}
+    function displayMoviesOnMap(agendas) {
+  agendas.forEach(agenda => {
+  const { date, hour, latitude, longitude,movie_or_programme_name,venue_id } = agenda;
+  
+  // Check if location is available
+  if (!latitude || !longitude) {
+    alert("Location not available for one of the movies.");
+    return;
+  }
+
+  const location2 = { lat: latitude, lng: longitude };
+
+  // Create a marker for the agenda on the map
+  const marker2 = new google.maps.Marker({
+    position: location2,
+    map: map2,
+    title: venue_id,
+    
+  });
+
+  const content = `
+    <div style="padding: 8px">
+      <h1 style="margin-top: 0">${venue_id}</h1>
+      <h2 style="margin-top: 0">${date} at ${hour} </h2>
+      <p>${movie_or_programme_name}</p>
+    </div>
+  `;
+
+  // Add an info window that appears when the marker is clicked
+  marker2.addListener('click', () => {
+    infoWindow2.setContent(content);
+    infoWindow2.open(map2, marker2);
+  });
+
+  // Optionally, adjust map center and zoom level based on the last agenda
+  map2.setCenter(location2);
+  map2.setZoom(8);
+});
+}
+
 
   </script>
 </body>

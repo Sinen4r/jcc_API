@@ -3,7 +3,7 @@ from flask import abort,request
 import uuid
 from flask.views import MethodView
 from app import db
-from schemas import AgendaSchema,UpdateAgendaSchema
+from schemas import AgendaSchema,UpdateAgendaSchema,AgendaDateSchema
 from models.e import Agenda
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -120,3 +120,20 @@ class agendabyMovie(MethodView):
         # Return the agenda object; Flask-Smorest will handle serialization
         return {"agendas": AgendaSchema(many=True).dump(movie)}
 
+@blp.route("/agenda/date")
+class agendabydate(MethodView):
+    @blp.arguments(AgendaDateSchema)
+    def post(self,agenda_data):
+        date = agenda_data['date']
+        hour = agenda_data['hour']
+        venue_id = agenda_data.get('venue_id')
+        movie_or_programme_name = agenda_data.get('movie_or_programme_name')
+
+        query = Agenda.query.filter(Agenda.date == date, Agenda.hour == hour)
+
+        if venue_id is not None:
+            query = query.filter(Agenda.venue_id == venue_id)
+        if movie_or_programme_name:
+            query = query.filter(Agenda.movie_or_programme_name.ilike(f"%{movie_or_programme_name}%"))
+        results = query.all()
+        return {"agendas": AgendaSchema(many=True).dump(results)}  # Replace with actual response format

@@ -39,11 +39,25 @@ class AgendaSchema(Schema):
     venue_id = fields.Str(required=False)  
     hour = fields.Str(format="%H:%M",required=False)  
     movie_or_programme_name = fields.Str(required=False) 
+    latitude = fields.Float()
+    longitude = fields.Float()
 class UpdateAgendaSchema(Schema):
     date = fields.Str(required=False)  
     venue_id = fields.Str(required=False)  
     hour = fields.Str(format="%H:%M",required=False)  
     movie_or_programme_name = fields.Str(required=False) 
+    latitude = fields.Float()
+    longitude = fields.Float()
+
+class AgendaDateSchema(Schema):
+    date=fields.Str(required=True)
+    venue_id = fields.Str(required=False)  
+    hour = fields.Str(format="%H:%M",required=True)  
+    movie_or_programme_name = fields.Str(required=False) 
+    latitude = fields.Float(dump_only=True)
+    longitude = fields.Float(dump_only=True)
+   
+
 
 class UserSchema(Schema):
     id = fields.Int(dump_only=True)  # This will be automatically generated
