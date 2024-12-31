@@ -24,7 +24,7 @@
     <div>
     <button onclick="window.location.href='signup.html';" class="signup-button">Sign Up</button>
     <button onclick="window.location.href='login.html';" class="signup-button">Login</button>
-     </div> 
+     </div>
   </nav>
 
   <!-- Hero Section -->
@@ -39,7 +39,7 @@
       </div>
     </div>
   </header>
-  <div  id="map"></div> 
+  <div  id="map"></div>
   <p class="subtitle" id="movies">What's Playing Today? Discover our Movies Near You!</p>
   <form class="form-container" >
     <label for="dateInput">Date:</label>
@@ -70,16 +70,32 @@
       <option value="DAR MASRAHI">DAR MASRAHI</option>
       <option value="pathé ksibet">pathé ksibet</option>
     </select>
-    
-    <label for="hourInput">Hour:</label>
-    <input type="time" id="hourInput" name="hour" required />
 
+    <label for="hourInput">Hour:</label>
+    <select id="hourInput" name="hour" required>
+      <option value="12:00">12:00</option>
+      <option value="12:15">12:15</option>
+      <option value="12:30">12:30</option>
+      <option value="12:45">12:45</option>
+      <option value="15:00">15:00</option>
+      <option value="15:15">15:15</option>
+      <option value="15:30">15:30</option>
+      <option value="15:45">15:45</option>
+      <option value="18:00">18:00</option>
+      <option value="18:15">18:15</option>
+      <option value="18:30">18:30</option>
+      <option value="18:45">18:45</option>
+      <option value="21:00">21:00</option>
+      <option value="21:15">21:15</option>
+      <option value="21:30">21:30</option>
+      <option value="21:45">21:45</option>
+    </select>
     <label for="movieNameInput">Movie Name:</label>
     <input type="text" id="movieNameInput" name="movie_or_programme_name" placeholder="Enter movie name"  />
 
     <button type="button" onclick="fetchAgendaData()">Submit</button>
   </form>
-  <div  id="map2"></div> 
+  <div  id="map2"></div>
 
   <footer class="footer">
     <div class="container">
@@ -127,8 +143,8 @@
       </div>
     </div>
   </footer>
-  
-  
+
+
   <script>
     let map;
 
@@ -253,19 +269,49 @@
   ],
 };
     // Initialize the map
+    const mapStyle = [
+  {
+    "featureType": "poi",
+    "elementType": "labels",
+    "stylers": [{ "visibility": "off" }],
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels",
+    "stylers": [{ "visibility": "off" }],
+  },
+  {
+    "featureType": "transit",
+    "elementType": "labels",
+    "stylers": [{ "visibility": "off" }],
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text",
+    "stylers": [{ "visibility": "off" }],
+  },
+  {
+    "featureType": "administrative",
+    "elementType": "labels",
+    "stylers": [{ "visibility": "off" }],
+  },
+];
+
     function initMap() {
       map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: 35.68814709583306, lng: 10.842432674245234 }, // Default location
         zoom: 12,
+        styles: mapStyle,
       });
 
       map.setOptions({ styles: style["retro"] });
 
       infoWindow = new google.maps.InfoWindow();
-   
+
       map2 = new google.maps.Map(document.getElementById("map2"), {
         center: { lat: 35.68814709583306, lng: 10.842432674245234 }, // Default location
         zoom: 12,
+        styles: mapStyle,
       });
 
       map2.setOptions({ styles: style["retro"] });
@@ -300,7 +346,7 @@
     function displayVenueOnMap(agendas) {
 agendas.forEach(agenda => {
   const { name, address, latitude, longitude } = agenda;
-  
+
   // Check if location is available
   if (!latitude || !longitude) {
     alert("Location not available for one of the agendas.");
@@ -308,12 +354,19 @@ agendas.forEach(agenda => {
   }
 
   const location = { lat: latitude, lng: longitude };
-
+  const image ="../static/images/jccred.png";
   // Create a marker for the agenda on the map
   const marker = new google.maps.Marker({
     position: location,
     map: map,
     title: name,
+    icon: {
+    url: image, // URL to your custom icon
+    scaledSize: new google.maps.Size(80, 80), // Adjust size of the icon
+  },
+
+  animation: google.maps.Animation.DROP
+
   });
 
   const content = `
@@ -359,7 +412,7 @@ agendas.forEach(agenda => {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                },                
+                },
                 body: JSON.stringify(requestBody),
                 });
                 console.log("fetched")
@@ -369,47 +422,73 @@ agendas.forEach(agenda => {
       const agendaData = await response.json();
       const agendas = agendaData.agendas || [];
       console.log(agendas)
-      displayMoviesOnMap(agendas);
+      if (agendas.length > 0){
+        displayMoviesOnMap(agendas);}
+      else{
+        alert("nothing to see sorry")
+      };
 
 }
-    function displayMoviesOnMap(agendas) {
-  agendas.forEach(agenda => {
-  const { date, hour, latitude, longitude,movie_or_programme_name,venue_id } = agenda;
-  
-  // Check if location is available
-  if (!latitude || !longitude) {
-    alert("Location not available for one of the movies.");
-    return;
-  }
+function displayMoviesOnMap(agendas) {
+  // Group agendas by venue_id
+  const venues = agendas.reduce((acc, agenda) => {
+    const { venue_id } = agenda;
+    if (!acc[venue_id]) {
+      acc[venue_id] = [];
+    }
+    acc[venue_id].push(agenda);
+    return acc;
+  }, {});
 
-  const location2 = { lat: latitude, lng: longitude };
+  // Iterate over each venue and create a marker
+  Object.keys(venues).forEach(venue_id => {
+    const venueAgendas = venues[venue_id];
+    const { latitude, longitude } = venueAgendas[0];
 
-  // Create a marker for the agenda on the map
-  const marker2 = new google.maps.Marker({
-    position: location2,
-    map: map2,
-    title: venue_id,
-    
+    // Check if location is available
+    if (!latitude || !longitude) {
+      alert(`Location not available for venue: ${venue_id}`);
+      return;
+    }
+
+    const location2 = { lat: latitude, lng: longitude };
+    const image ="../static/images/jccred.png";
+
+    // Create a marker for the venue
+    const marker2 = new google.maps.Marker({
+      position: location2,
+      map: map2,
+      title: venue_id,
+      icon: {
+      url: image, // URL to your custom icon
+      scaledSize: new google.maps.Size(80, 80), // Adjust size of the icon
+  }});
+
+  animation: google.maps.Animation.DROP
+    // Create the content for the info window with all movies
+    const content = `
+      <div style="padding: 6px">
+        <h1 id="venue" style="margin-top: 0">${venue_id}</h1>
+        ${venueAgendas
+          .map(
+            ({ date, hour, movie_or_programme_name }) =>
+              `<h2 id="movieTitle">${movie_or_programme_name}</h2>
+              <p style="margin-top: 0">${date} at ${hour}</p>`
+          )
+          .join('<hr>')}
+      </div>
+    `;
+
+    // Add an info window that appears when the marker is clicked
+    marker2.addListener('click', () => {
+      infoWindow2.setContent(content);
+      infoWindow2.open(map2, marker2);
+    });
+
+    // Optionally, adjust map center and zoom level based on the last venue
+    map2.setCenter(location2);
+    map2.setZoom(14);
   });
-
-  const content = `
-    <div style="padding: 8px">
-      <h1 style="margin-top: 0">${venue_id}</h1>
-      <h2 style="margin-top: 0">${date} at ${hour} </h2>
-      <p>${movie_or_programme_name}</p>
-    </div>
-  `;
-
-  // Add an info window that appears when the marker is clicked
-  marker2.addListener('click', () => {
-    infoWindow2.setContent(content);
-    infoWindow2.open(map2, marker2);
-  });
-
-  // Optionally, adjust map center and zoom level based on the last agenda
-  map2.setCenter(location2);
-  map2.setZoom(8);
-});
 }
 
 

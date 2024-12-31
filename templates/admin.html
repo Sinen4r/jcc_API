@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Movies, Venues, Programs, and Agendas</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .container {
+      display: flex;
+      flex-direction:row;
+      gap :5px;
+    }
+    #subcontainer{
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+    .section {
+      border: 1px solid #444;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #222;
+    }
+    .section h2 {
+      margin-bottom: 15px;
+    }
+    .section input, .section textarea, #agendaVenueIdInput{
+      width: 300px;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    .section button {
+      background-color: blue;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .section button:hover {
+      background-color: darkblue;
+    }
+    #button{
+      background-color: blue;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: none;
+    }
+
+  </style>
+</head>
+<body>
+  <div id ="header">
+  <h1>Manage Movies, Venues, Programs, and Agendas</h1>
+  <a href="agendas.html" id="button">Home</a>
+</div>
+  <div class="container">
+    <div id="subcontainer">
+    <!-- Movies Section -->
+    <div class="section">
+      <h2>Movies</h2>
+      <h3>Add Movie</h3>
+      <input type="text" placeholder="Movie Name" id="name" />
+      <input type="text" placeholder="Author" id="Author" />
+      <input type="text" placeholder="Category" id="Category"/>
+      <input type="text" placeholder="duration" id="duration"/>
+      <input type="text" placeholder="subtitles" id="subtitles"/>
+      <input type="text" placeholder="nationality" id="nationality"/>
+      <button onclick="addMovie()">Add Movie</button>
+
+      <h3>Delete Movie</h3>
+      <input type="text" placeholder="Movie ID " id="movieID"/>
+      <button onclick="deleteMovie()">Delete Movie</button>
+
+      <h3>Update Movie</h3>
+      <input type="text" placeholder="Movie ID or Name" />
+      <textarea placeholder="Enter New Movie Details"></textarea>
+      <button>Update Movie</button>
+    </div>
+
+    <!-- Venues Section -->
+    <div class="section">
+      <h2>Venues</h2>
+      <h3>Add Venue</h3>
+      <input type="text" placeholder="Venue Name" id="venueName" /> 
+      <input type="text" placeholder="Location" id="address" />
+      <input type="text" placeholder="latitude" id="latitude" />
+      <input type="text" placeholder="longitude" id="longitude" />
+
+      <button onclick="addVenue()">Add Venue</button>
+
+      <h3>Delete Venue</h3>
+      <input type="text" placeholder="Venue ID or Name" id="venueID"/>
+      <button onclick="deleteVenue()">Delete Venue</button>
+
+      <h3>Update Venue</h3>
+      <input type="text" placeholder="Venue ID or Name"  />
+      <textarea placeholder="Enter New Venue Details"></textarea>
+      <button>Update Venue</button>
+    </div>
+</div>
+    <!-- Programs Section -->
+    <div id="subcontainer">
+    <div class="section">
+      <h2>Programs</h2>
+      <h3>Add Program</h3>
+      <input type="text" placeholder="Program Name" id="programme_name" />
+      <input type="text" placeholder="Duration" id="durations" />
+      <button onclick="addProgram()">Add Program</button>
+
+      <h3>Delete Program</h3>
+      <input type="text" placeholder="Program ID or Name" id="programmeID" />
+      <button onclick="deleteProgram()">Delete Program</button>
+
+      <h3>Update Program</h3>
+      <input type="text" placeholder="Program ID or Name" />
+      <textarea placeholder="Enter New Program Details"></textarea>
+      <button>Update Program</button>
+    </div>
+
+    <!-- Agendas Section -->
+    <div class="section">
+      <h2>Agendas</h2>
+      <h3>Add Agenda</h3>
+      <input type="number" id="agendaIdInput" placeholder="Agenda ID" />
+      <input type="text" id="agendaTitleInput" placeholder="Agenda Title" />
+      <input type="text" id="agendaDateInput" placeholder="Date" />
+      <input type="text" id="agendaTimeInput" placeholder="Time" />
+      <select id="agendaVenueIdInput" name="venue_id" >
+        <option value="" disabled selected>Select a venue</option>
+        <option value="L'OPERA">L'OPERA</option>
+        <option value="THEATRE DES REGIONS">THEATRE DES REGIONS</option>
+        <option value="LE 4EME ART">LE 4EME ART</option>
+        <option value="ABC">ABC</option>
+        <option value="LE RIO">LE RIO</option>
+        <option value="OMAR KHELIFI">OMAR KHELIFI</option>
+        <option value="THAER CHERIAA">THAER CHERIAA</option>
+        <option value="AFRICA">AFRICA</option>
+        <option value="LE COLISIEE">LE COLISIEE</option>
+        <option value="IBN RACHIQ">IBN RACHIQ</option>
+        <option value="LE PALACE">LE PALACE</option>
+        <option value="LE MONDIAL">LE MONDIAL</option>
+        <option value="PARNASSE">PARNASSE</option>
+        <option value="CINE AVENUE">CINE AVENUE</option>
+        <option value="ELHAMBRA ZEPHYR">ELHAMBRA ZEPHYR</option>
+        <option value="MAD'ART">MAD'ART</option>
+        <option value="AGORA">AGORA</option>
+        <option value="CINEVOG">CINEVOG</option>
+        <option value="AMILCAR">AMILCAR</option>
+        <option value="DAR MASRAHI">DAR MASRAHI</option>
+        <option value="pathé ksibet">pathé ksibet</option>
+      </select>
+  
+      <input type="text" id="agendaMovieInput" placeholder="Movie/Programme Name" />
+      <input type="number" id="agendaLatitudeInput" placeholder="Latitude" />
+      <input type="number" id="agendaLongitudeInput" placeholder="Longitude" />
+      
+      <!-- Button to trigger agenda addition -->
+      <button onclick="addAgenda()">Add Agenda</button>
+
+      <h3>Delete Agenda</h3>
+      <input type="text" placeholder="Agenda ID or Title" id="agendaID" />
+      <button onclick="deleteAgenda()">Delete Agenda</button>
+
+      <h3>Update Agenda</h3>
+      <input type="text" placeholder="Agenda ID or Title" />
+      <textarea placeholder="Enter New Agenda Details"></textarea>
+      <button>Update Agenda</button>
+    </div>
+    </div>
+  </div>
+</body>
+<script>
+//Moviesssssss
+ async function addMovie() {
+    // Get input values
+    const name = document.getElementById("name").value;
+    const Author = document.getElementById("Author").value;
+    const Category = document.getElementById("Category").value;
+    const duration = document.getElementById("duration").value;
+    const subtitles = document.getElementById("subtitles").value;
+    const nationality = document.getElementById("nationality").value;
+
+
+    // Validate inputs
+    if (!name || !Author || !Category ||!duration ||!subtitles ||!nationality) {
+      alert("Please fill out all fields before submitting.");
+      return;
+    }
+
+    // Prepare data for the endpoint
+    const movieData = {
+      name: name,
+      author: Author,
+      category: Category,
+      duration :duration,
+      subtitles:subtitles,
+      nationality:nationality,
+    };
+
+    try {
+      // Send data to the backend
+      const response = await fetch("http://127.0.0.1:5000/movie", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(movieData),
+      });
+
+      // Handle response
+      if (response.ok) {
+        alert("Movie added successfully!");
+      } else {
+        const errorMessage = await response.text();
+        alert(`Failed to add movie: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while adding the movie.");
+    }
+  }
+ async function deleteMovie(){
+    const movieID = document.getElementById("movieID").value;
+    if (!movieID) {
+      alert("Please provide a movie ID.");
+      return;
+    }
+
+    try {
+      // Send DELETE request to the endpoint
+      const response = await fetch(`http://127.0.0.1:5000/movie/${movieID}`, {
+        method: "DELETE",
+      });
+
+      // Handle response
+      if (response.ok) {
+        alert("Movie deleted successfully!");
+        // Optionally clear the input field
+        document.getElementById("movieIdInput").value = "";
+      } else {
+        const errorMessage = await response.text();
+        alert(`Failed to delete movie: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while deleting the movie.");
+    }
+ }
+// VENUESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+
+async function addVenue() {
+    // Get input values
+    const venueName = document.getElementById("venueName").value;
+    const address = document.getElementById("address").value;
+    const latitude = document.getElementById("latitude").value;
+    const longitude = document.getElementById("longitude").value;
+
+
+
+    // Validate inputs
+    if (!venueName || !address || !latitude ||!longitude) {
+      alert("Please fill out all fields before submitting.");
+      return;
+    }
+
+    // Prepare data for the endpoint
+    const movieData = {
+      name: venueName,
+      address: address,
+      latitude: latitude,
+      longitude :longitude,
+ 
+    };
+
+    try {
+      // Send data to the backend
+      const response = await fetch("http://127.0.0.1:5000/Venue", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(movieData),
+      });
+
+      // Handle response
+      if (response.ok) {
+        alert("Venue added successfully!");
+      } else {
+        const errorMessage = await response.text();
+        alert(`Failed to add Venue: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while adding the Venue.");
+    }
+  }
+async function deleteVenue(){
+    const venueID = document.getElementById("venueID").value;
+    if (!venueID) {
+      alert("Please provide a venueID.");
+      return;
+    }
+
+    try {
+      // Send DELETE request to the endpoint
+      const response = await fetch(`http://127.0.0.1:5000/Venue/${venueID}`, {
+        method: "DELETE",
+      });
+
+      // Handle response
+      if (response.ok) {
+        alert("venue deleted successfully!");
+        // Optionally clear the input field
+        document.getElementById("venueID").value = "";
+      } else {
+        const errorMessage = await response.text();
+        alert(`Failed to delete venue: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while deleting the venue.");
+    }
+ }
+
+//Programssssssssss
+async function addProgram() {
+    const programme_name = document.getElementById("programme_name").value;
+    const duration = document.getElementById("durations").value;
+
+
+
+
+    // Validate inputs
+    if (!programme_name || !duration ) {
+      alert("Please fill out all fields before submitting.");
+      return;
+    }
+
+    // Prepare data for the endpoint
+    const movieData = {
+        programme_name: programme_name,
+        duration: duration,
+
+ 
+    };
+
+    try {
+      // Send data to the backend
+      const response = await fetch("http://127.0.0.1:5000/program", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(movieData),
+      });
+
+      // Handle response
+      if (response.ok) {
+        alert("programme added successfully!");
+      } else {
+        const errorMessage = await response.text();
+        alert(`Failed to add programme: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while adding the programme.");
+    }
+  
+
+}
+async function deleteProgram(){
+    const programmeID = document.getElementById("programmeID").value;
+    if (!programmeID) {
+      alert("Please provide a venueID.");
+      return;
+    }
+
+    try {
+      // Send DELETE request to the endpoint
+      const response = await fetch(`http://127.0.0.1:5000/program/${programmeID}`, {
+        method: "DELETE",
+      });
+
+      // Handle response
+      if (response.ok) {
+        alert("venue deleted successfully!");
+        // Optionally clear the input field
+        document.getElementById("programmeID").value = "";
+      } else {
+        const errorMessage = await response.text();
+        alert(`Failed to delete programme: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while deleting the programme.");
+    }
+ }
+
+//agendassssssssss
+async function addAgenda() {
+    const agendaId = document.getElementById("agendaIdInput").value;
+    const title = document.getElementById("agendaTitleInput").value;
+    const date = document.getElementById("agendaDateInput").value;
+    const hour = document.getElementById("agendaTimeInput").value;
+    const venueId = document.getElementById("agendaVenueIdInput").value;
+    const movieOrProgrammeName = document.getElementById("agendaMovieInput").value;
+    const latitude = document.getElementById("agendaLatitudeInput").value;
+    const longitude = document.getElementById("agendaLongitudeInput").value;
+
+    // Validate inputs
+    if (!agendaId || !title || !date || !hour || !venueId || !movieOrProgrammeName || !latitude || !longitude) {
+      alert("Please fill out all fields before submitting.");
+      return;
+    }
+    // Prepare data for the endpoint
+    const agendaData = {
+      id: agendaId,
+      date: date,
+      venue_id: venueId,
+      hour: hour,
+      movie_or_programme_name: movieOrProgrammeName,
+      latitude: parseFloat(latitude),
+      longitude: parseFloat(longitude)
+    };
+    try {
+      // Send data to the backend
+      const response = await fetch("http://127.0.0.1:5000/agenda", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(agendaData),
+      });
+
+      // Handle response
+      if (response.ok) {
+        alert("Agenda added successfully!");
+        // Optionally clear the input fields
+        document.getElementById("agendaIdInput").value = "";
+        document.getElementById("agendaTitleInput").value = "";
+        document.getElementById("agendaDateInput").value = "";
+        document.getElementById("agendaTimeInput").value = "";
+        document.getElementById("agendaVenueIdInput").value = "";
+        document.getElementById("agendaMovieInput").value = "";
+        document.getElementById("agendaLatitudeInput").value = "";
+        document.getElementById("agendaLongitudeInput").value = "";
+      } else {
+        const errorMessage = await response.text();
+        alert(`Failed to add agenda: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while adding the agenda.");
+    }
+  }
+  async function deleteAgenda(){
+    const programmeID = document.getElementById("agendaID").value;
+    if (!programmeID) {
+      alert("Please provide a agendaID.");
+      return;
+    }
+
+    try {
+      // Send DELETE request to the endpoint
+      const response = await fetch(`http://127.0.0.1:5000/agenda/${programmeID}`, {
+        method: "DELETE",
+      });
+
+      // Handle response
+      if (response.ok) {
+        alert("agenda deleted successfully!");
+        // Optionally clear the input field
+        document.getElementById("agendaID").value = "";
+      } else {
+        const errorMessage = await response.text();
+        alert(`Failed to delete agenda: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while deleting the agenda.");
+    }
+ }
+
+</script>
+</html>

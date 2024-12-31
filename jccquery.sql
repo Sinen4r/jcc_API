@@ -1,4 +1,12 @@
 Set search_path to jcc_festival;
+
+
+select * from agenda;
+
+
+
+
+
 CREATE TABLE movies (
     name VARCHAR(255) PRIMARY KEY,
 	author varchar(255) not null,
@@ -630,3 +638,14 @@ SELECT * FROM agenda;
 	('2024-12-','',':',''),
 	('2024-12-','',':',''),
 	('2024-12-','',':',''),
+
+select * from agenda;
+
+select * from venues;
+
+
+UPDATE agenda
+SET latitude = v.latitude,
+    longitude = v.longitude
+FROM venues v
+WHERE agenda.venue_id = v.name;

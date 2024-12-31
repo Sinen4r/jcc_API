@@ -27,7 +27,7 @@ class authentication(MethodView):
 
         if not user.check_password(password):
             abort(401,description="Incorrect password")  
-        return {"message": "Login successful"}
+        return {"message": user.role}
 @blpAuth.route("/createUser")
 class create(MethodView):
     @blpAuth.response(200,LoginResponseSchema)

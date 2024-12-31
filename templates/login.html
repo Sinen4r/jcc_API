@@ -82,8 +82,13 @@
       
               if (response.ok) {
                 const data = await response.json();
-                alert(data.message); // Show success message
-                window.location.href = "agendas.html"; // Redirect to another page
+				if (data.message === "admin") {
+					// Redirect to agendas.html if the message is 'admin'
+					window.location.href = "admin.html";
+				} else {
+					// Redirect to info.html if the message is not 'admin'
+					window.location.href = "agendas.html";
+				} // Redirect to another page
               } else {
                 const errorData = await response.json();
                 alert(`Error: ${errorData.description}`); // Show error message
