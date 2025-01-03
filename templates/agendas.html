@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JCC Agenda</title>
   <link rel="stylesheet" href="../static/css/style.css">
-  <script
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDF3PyWSf5imANfClhmeP2BjdI7uLIZBtI&callback=initMap&libraries=geometry,places&v=weekly"
-  async
-  defer
-></script>
+
 </head>
 <body>
   <!-- Navbar -->
@@ -21,9 +17,8 @@
       <a href="#faq">FAQ</a>
       <a href="#pricing">Pricing</a>
     </div>
-    <div>
-    <button onclick="window.location.href='signup.html';" class="signup-button">Sign Up</button>
-    <button onclick="window.location.href='login.html';" class="signup-button">Login</button>
+    <div id="buttons">
+    <button onclick="displayLogin()" class="signup-button">Sign out</button>
      </div>
   </nav>
 
@@ -407,7 +402,8 @@ agendas.forEach(agenda => {
   if (movie_or_programme_name) {
     requestBody.movie_or_programme_name = movie_or_programme_name; // Add movie_or_programme_name only if it's not empty
     }
-        console.log(date,hour);
+    console.log(requestBody);
+    console.log(date,hour);
     const response = await fetch(`http://127.0.0.1:5000/agenda/date`, {
                 method: "POST",
                 headers: {
@@ -490,8 +486,33 @@ function displayMoviesOnMap(agendas) {
     map2.setZoom(14);
   });
 }
+function displayLogin(){
+  window.location.href = "http://127.0.0.1:5000/login"
+  document.cookie = "access_token_cookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  document.cookie = "csrf_access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  console.log("Cookies deleted.");
+}
+window.onload = function () {
+    const lastPage = localStorage.getItem("lastPage");
+    const buttonsDiv = document.getElementById("buttons");
 
+    if (lastPage) {
+        const backButton = document.createElement("button");
+        backButton.innerText = "Go Back";
+        backButton.onclick = function () {
+            window.location.href = lastPage;
+        };
+        buttonsDiv.appendChild(backButton);
+        localStorage.removeItem("lastPage");
 
+    }
+
+};
   </script>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5J7V8n2bgccPJ41l4kZgFFgaf7tif2vk&callback=initMap&libraries=geometry,places&v=weekly"
+    async
+    defer
+  ></script>
 </body>
 </html>

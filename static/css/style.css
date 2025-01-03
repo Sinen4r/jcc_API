@@ -57,7 +57,20 @@ body, html {
     border-radius: 5px;
     margin-right: 50px;
   }
-  
+  button{
+    background-color: #3D9DF6;
+    color: white;
+    border: none;
+    font-weight:600;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 50px;
+  }
+  button:hover{
+    background-color: #1A73E8;
+ 
+  }
   .signup-button:hover {
     background-color: #1A73E8;
   }

@@ -46,7 +46,7 @@
 							Create an account?
 						</span>
 
-						<a href="signup.html" class="txt2 hov1">
+						<a onclick="displayLogin()" class="txt2 hov1">
 							Sign up
 						</a>
 					</div>
@@ -79,15 +79,18 @@
                 },
                 body: JSON.stringify({ username, password }),
               });
+			  
       
               if (response.ok) {
                 const data = await response.json();
+				console.log("=================================")
+				console.log(data)
 				if (data.message === "admin") {
 					// Redirect to agendas.html if the message is 'admin'
-					window.location.href = "admin.html";
+					window.location.href = "http://127.0.0.1:5000/admin";
 				} else {
 					// Redirect to info.html if the message is not 'admin'
-					window.location.href = "agendas.html";
+					window.location.href = "http://127.0.0.1:5000/agendas";
 				} // Redirect to another page
               } else {
                 const errorData = await response.json();
@@ -99,6 +102,10 @@
             }
           });
         });
+		function displayLogin(){
+		window.location.href = "http://127.0.0.1:5000/createUser"
+
+}
       </script>
       
 

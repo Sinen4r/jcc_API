@@ -1,3 +1,5 @@
+from datetime import timedelta
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_smorest import Api
@@ -10,6 +12,7 @@ from resources.venues import blpVen
 from resources.agenda import blp
 from resources.authentication import blpAuth
 
+from flask_jwt_extended import JWTManager
 
 def create_app(db_url=None):
     app = Flask(__name__)
@@ -22,11 +25,19 @@ def create_app(db_url=None):
     app.config[
         "OPENAPI_SWAGGER_UI_URL"
     ] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:test@localhost/jcc_festival'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:test@db:5432/jcc_festival'
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["PROPAGATE_EXCEPTIONS"] = True
+    app.config["JWT_SECRET_KEY"]="5e884898da28047151d0e56f8dc6292773603d0d6aabbddc73e06ef7ff70e2c4"
     db.init_app(app)
     api = Api(app)
+    jwt = JWTManager(app)
+    app.config['JWT_COOKIE_SECURE'] = False
+    app.config['JWT_ACCESS_COOKIE_PATH'] = '/' 
+    app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=2) 
+    app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+    DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://myuser:mypassword@db:5432/mydatabase')
 
 
             
@@ -45,7 +56,7 @@ from sqlalchemy import inspect
 from sqlalchemy import create_engine
 
 # Create an engine using your DATABASE URI
-engine = create_engine('postgresql://postgres:test@localhost/jcc_festival')
+engine = create_engine('postgresql://postgres:test@db:5432/jcc_festival')
 
 # Try connecting to the database
 try:

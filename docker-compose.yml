@@ -1,0 +1,53 @@
+# version: '3.8'
+
+# services:
+#   web:
+#     build: .
+#     ports:
+#       - "5000:5000"
+#     environment:
+#       - FLASK_ENV=production
+#       - SQLALCHEMY_DATABASE_URI=postgresql://postgres:test@db:5432/jcc_festival
+#     depends_on:
+#       - db
+#     volumes:
+#       - .:/app
+
+#   db:
+#     image: postgres:17
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: test
+#       POSTGRES_DB: jcc_festival
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+
+# volumes:
+#   postgres_data:
+
+version: '3'
+services:
+  db:
+    image: postgres:13  
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: jcc_festival
+    volumes:
+      - postgres_data:/var/lib/postgresql/data 
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=app.py  
+      - FLASK_ENV=development
+    volumes:
+      - .:/app   
+volumes:
+    postgres_data:
+
