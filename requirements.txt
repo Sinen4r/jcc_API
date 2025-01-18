@@ -3,6 +3,9 @@ flask-smorest
 python-dotenv
 marshmallow
 flask_sqlalchemy
-psycopg2-binary
 flask-cors
 flask-jwt-extended
+flask_limiter
+Authlib
+requests
+psycopg2

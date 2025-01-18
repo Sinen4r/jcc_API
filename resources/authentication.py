@@ -1,5 +1,5 @@
 from flask_smorest import Blueprint
-from flask import abort, render_template,request,make_response,jsonify
+from flask import abort, render_template,request,make_response,jsonify, url_for,session
 import uuid
 from flask.views import MethodView
 from app import db
@@ -9,8 +9,26 @@ from sqlalchemy.exc import SQLAlchemyError
 from flask_jwt_extended import (
     JWTManager, create_access_token, jwt_required, get_jwt_identity,set_access_cookies
 )
+import random
+from resources.googleOath import google
 
 blpAuth=Blueprint("authentication",__name__)
+
+# oauth = OAuth()
+# google = oauth.register(
+#     'google',
+#     client_id='84497968223-sq4jgsb2gu8tlgpqavlb8n0gc395ir5v.apps.googleusercontent.com',
+#     client_secret='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',
+#     authorize_url='https://accounts.google.com/o/oauth2/auth',
+#     access_token_url='https://accounts.google.com/o/oauth2/token',
+#     api_base_url='https://www.googleapis.com/oauth2/v2/',
+#     client_kwargs={'scope': 'openid profile email'},
+#     authorize_state="5e884898da28047151d0e56f8dc6292773603d0d6aabbddc73e06ef7ff70e2c4"
+# )
+
+# # Flask app will initialize OAuth during app setup
+# def init_oauth(app):
+#     oauth.init_app(app)
 
 @blpAuth.route("/login")
 class authentication(MethodView):
@@ -69,3 +87,46 @@ class create(MethodView):
 class authentication(MethodView):
     def get(self):
             return render_template('admin.html')
+
+@blpAuth.route('/auth/google')
+def google_login():
+    
+    redirect_uri = url_for('authentication.google_callback', _external=True)
+    # redirect_uri="http://localhost:5000/callback"
+    state = session.get('state')
+    print("-----------------------------",state)
+
+    return google.authorize_redirect(redirect_uri)
+
+@blpAuth.route('/callback')
+def google_callback():
+    print(f"Session State: {session.get('state')}")  # Debugging: print session state
+    # Retrieve the token after successful authentication
+    token = google.authorize_access_token()
+    if not token:
+        abort(400, 'State missing or invalid')
+    
+    # Fetch user info from Google
+    user_info = google.get('userinfo').json()
+
+    # Extract user information
+    email = user_info.get('email')
+    first_name = user_info.get('given_name')
+    last_name = user_info.get('family_name')
+    username = first_name  + last_name+str(random.randint(1,999))  
+
+    # Example: Creating a dictionary with the required fields
+    user_data = {
+        "username": username,
+        "email": email,
+        "password_hash": "00001232145s@",  
+        "last_name": last_name
+    }
+
+    new_user = User(**user_data)  
+    new_user.set_password(user_data['password_hash'])
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return render_template('agendas.html') 

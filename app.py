@@ -11,8 +11,11 @@ from resources.programs import blpProg
 from resources.venues import blpVen
 from resources.agenda import blp
 from resources.authentication import blpAuth
+from resources.googleOath import init_oauth
+
 
 from flask_jwt_extended import JWTManager
+
 
 def create_app(db_url=None):
     app = Flask(__name__)
@@ -25,7 +28,7 @@ def create_app(db_url=None):
     app.config[
         "OPENAPI_SWAGGER_UI_URL"
     ] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:test@db:5432/jcc_festival'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:test@localhost/jcc_festival'
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["JWT_SECRET_KEY"]="5e884898da28047151d0e56f8dc6292773603d0d6aabbddc73e06ef7ff70e2c4"
@@ -34,18 +37,25 @@ def create_app(db_url=None):
     jwt = JWTManager(app)
     app.config['JWT_COOKIE_SECURE'] = False
     app.config['JWT_ACCESS_COOKIE_PATH'] = '/' 
-    app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+    app.config['JWT_COOKIE_CSRF_PROTECT'] = False
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=2) 
     app.config['JWT_TOKEN_LOCATION'] = ['cookies']
-    DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://myuser:mypassword@db:5432/mydatabase')
+    DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://postgres:test@localhost/jcc_festival')
+    app.config['SECRET_KEY'] = '5e884898da28047151d0e56f8dc6292773603d0d6aabbddc73e06ef7ff70e2c4'
+    app.config['SESSION_COOKIE_HTTPONLY'] = True  # Ensure cookies are secured
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    app.config['OAUTH_CREDENTIALS'] = {
+    'client_id': '84497968223-sq4jgsb2gu8tlgpqavlb8n0gc395ir5v.apps.googleusercontent.com',
+    'client_secret': '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',
+}
+    init_oauth(app)
 
-
-            
     api.register_blueprint(blp)
     api.register_blueprint(blpProg)
     api.register_blueprint(blpM)
     api.register_blueprint(blpVen)
     api.register_blueprint(blpAuth)
+
     return app
 
 
@@ -56,7 +66,7 @@ from sqlalchemy import inspect
 from sqlalchemy import create_engine
 
 # Create an engine using your DATABASE URI
-engine = create_engine('postgresql://postgres:test@db:5432/jcc_festival')
+engine = create_engine('postgresql://postgres:test@localhost/jcc_festival')
 
 # Try connecting to the database
 try:
